@@ -3,6 +3,12 @@ var count = document.querySelector("#count");
 var total = document.querySelector("#total");
 var seats = document.querySelectorAll(".row .seat:not(.occupied)");
 var movie = document.getElementById("movie");
+
+
+populateUi();
+count.innerHTML = updateCount();
+total.innerHTML = updateTotal();
+
 function updateCount(){
     var count = document.querySelectorAll(".row .seat.selected").length;
 
@@ -10,7 +16,7 @@ function updateCount(){
     //console.log(selectedSeats);
     const seatsIndex= [...selectedSeats].map(function(seat){
         return [...seats].indexOf(seat);
-    })
+    });
     localStorage.setItem('selectedSeats',JSON.stringify(seatsIndex));  //its a key value pair
    // console.log(count);
     return count;
@@ -38,3 +44,20 @@ movie.addEventListener("change",(e)=>{
     total.innerHTML = updateTotal();
     setMovieData(e.target.selectedIndex,e.target.value);
 });
+
+function populateUi(){
+    const selectedSeats =JSON.parse(localStorage.getItem("selectedSeats"));
+    if(selectedSeats !== null && selectedSeats.length >0){
+        seats.forEach((seat,index)=>{
+            if(selectedSeats.indexOf(index)>-1){
+                seat.classList.add('selected');
+            }
+        });  
+    }
+    const selectedMovieIndex = localStorage.getItem("MovieIndex");
+    if(selectedMovieIndex !== null){
+        movie.selectedIndex  = selectedMovieIndex;
+    }
+}
+
+
